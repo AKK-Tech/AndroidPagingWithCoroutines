@@ -11,6 +11,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import ke.co.appslab.androidpagingwithcoroutines.adapters.RedditLoadPostsAdapter
 import ke.co.appslab.androidpagingwithcoroutines.adapters.RedditPostsAdapter
+import ke.co.appslab.androidpagingwithcoroutines.adapters.UnsplashAdapter
 import ke.co.appslab.androidpagingwithcoroutines.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val redditPostsAdapter = RedditPostsAdapter()
+    private val unsplashAdapter = UnsplashAdapter()
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -35,9 +37,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeLiveData() {
         //observe live data emitted by view model
+//        lifecycleScope.launch {
+//            mainViewModel.flow.collectLatest { pagingData ->
+//                redditPostsAdapter.submitData(pagingData)
+//            }
+//        }
         lifecycleScope.launch {
-            mainViewModel.flow.collectLatest { pagingData ->
-                redditPostsAdapter.submitData(pagingData)
+            mainViewModel.unsplashFlow.collectLatest { pagingData ->
+                unsplashAdapter.submitData(pagingData)
             }
         }
 
@@ -45,11 +52,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeList() {
         list.layoutManager = LinearLayoutManager(this)
-        list.adapter = redditPostsAdapter
-        redditPostsAdapter.withLoadStateHeaderAndFooter(
-            header = RedditLoadPostsAdapter(redditPostsAdapter::retry),
-            footer = RedditLoadPostsAdapter(redditPostsAdapter::retry)
+        list.adapter = unsplashAdapter
+        list.adapter = unsplashAdapter.withLoadStateHeaderAndFooter(
+            header = RedditLoadPostsAdapter { unsplashAdapter::retry },
+            footer = RedditLoadPostsAdapter { unsplashAdapter::retry }
         )
+
 
     }
 

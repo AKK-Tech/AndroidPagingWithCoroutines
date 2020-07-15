@@ -1,6 +1,7 @@
 package ke.co.appslab.androidpagingwithcoroutines.networking
 
 import ke.co.appslab.androidpagingwithcoroutines.networking.ApiEndPoints.BASE_URL
+import ke.co.appslab.androidpagingwithcoroutines.networking.ApiEndPoints.UNSPLASH_BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,7 +27,7 @@ class ApiClient {
         fun getClient(): Retrofit {
             when (retrofit) {
                 null -> retrofit = Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(UNSPLASH_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build()

@@ -6,6 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import ke.co.appslab.androidpagingwithcoroutines.repositories.PostsPagingSource
+import ke.co.appslab.androidpagingwithcoroutines.repositories.UnsplashPagingSource
 
 class MainViewModel : ViewModel() {
 
@@ -13,6 +14,12 @@ class MainViewModel : ViewModel() {
         PagingConfig(pageSize = 1, enablePlaceholders = false)
     ) {
         PostsPagingSource()
+    }.flow.cachedIn(viewModelScope)
+
+    val unsplashFlow = Pager(
+        PagingConfig(pageSize = 10, enablePlaceholders = false)
+    ) {
+        UnsplashPagingSource()
     }.flow.cachedIn(viewModelScope)
 
 
